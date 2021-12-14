@@ -25,7 +25,16 @@ const CustomHandler = {
     );
   },
   async handle(handlerInput) {
-    const token = handlerInput.requestEnvelope.session.user.accessToken;
+    const token = handlerInput.requestEnvelope.context.System.user.accessToken;
+
+    if (!token) {
+      return handlerInput.responseBuilder
+        .speak(
+          "手ぶらメモをご利用になるにはLINEアプリとアカウントリンクが必要です。Alexaアプリを使用してAmazonアカウントとLINEアカウントをリンクしてください。"
+        )
+        .withLinkAccountCard()
+        .getResponse();
+    }
 
     const memo = handlerInput.requestEnvelope.request.intent.slots.Memo.value;
 
